@@ -1,0 +1,9 @@
+{
+	"name": "adf-ucb-dw-examen-02122025",
+	"location": "brazilsouth",
+	"identity": {
+		"type": "SystemAssigned",
+		"principalId": "39091632-74b8-46a0-a060-26d313289aad",
+		"tenantId": "cc28633f-12b8-46cb-bc15-951dae239b4d"
+	}
+}
