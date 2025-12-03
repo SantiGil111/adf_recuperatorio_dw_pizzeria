@@ -1,5 +1,5 @@
 {
-	"name": "df_silver_orders",
+	"name": "df_silver_pizza_types",
 	"properties": {
 		"folder": {
 			"name": "Silver"
@@ -9,7 +9,7 @@
 			"sources": [
 				{
 					"dataset": {
-						"referenceName": "ds_sql_orders",
+						"referenceName": "ds_sql_pizza_types",
 						"type": "DatasetReference"
 					},
 					"name": "source1"
@@ -18,7 +18,7 @@
 			"sinks": [
 				{
 					"dataset": {
-						"referenceName": "ds_sql_silver_orders",
+						"referenceName": "ds_sql_silver_pizza_types",
 						"type": "DatasetReference"
 					},
 					"name": "sink1"
@@ -31,26 +31,26 @@
 			],
 			"scriptLines": [
 				"source(output(",
-				"          order_id as string,",
-				"          date as string,",
-				"          time as string",
+				"          pizza_type_id as string,",
+				"          name as string,",
+				"          category as string",
 				"     ),",
 				"     allowSchemaDrift: true,",
 				"     validateSchema: false,",
 				"     isolationLevel: 'READ_UNCOMMITTED',",
 				"     format: 'table') ~> source1",
 				"source1 cast(output(",
-				"          order_id as integer,",
-				"          date as date,",
-				"          time as timestamp 'HH:mm:ss'",
+				"          pizza_type_id as string,",
+				"          name as string,",
+				"          category as string",
 				"     ),",
 				"     errors: true) ~> cast1",
 				"cast1 sink(allowSchemaDrift: true,",
 				"     validateSchema: false,",
 				"     input(",
-				"          order_id as integer,",
-				"          date as date,",
-				"          time as timestamp",
+				"          pizza_type_id as integer,",
+				"          name as string,",
+				"          category as string",
 				"     ),",
 				"     deletable:false,",
 				"     insertable:true,",

@@ -1,0 +1,39 @@
+{
+	"name": "ds_sql_silver_pizzas",
+	"properties": {
+		"linkedServiceName": {
+			"referenceName": "ls_sql_dw_pizzeria",
+			"type": "LinkedServiceReference"
+		},
+		"folder": {
+			"name": "Silver"
+		},
+		"annotations": [],
+		"type": "AzureSqlTable",
+		"schema": [
+			{
+				"name": "pizza_id",
+				"type": "varchar"
+			},
+			{
+				"name": "pizza_type_id",
+				"type": "int",
+				"precision": 10
+			},
+			{
+				"name": "size",
+				"type": "nvarchar"
+			},
+			{
+				"name": "price",
+				"type": "decimal",
+				"precision": 10,
+				"scale": 2
+			}
+		],
+		"typeProperties": {
+			"schema": "silver",
+			"table": "pizzas"
+		}
+	}
+}
