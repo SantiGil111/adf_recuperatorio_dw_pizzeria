@@ -1,5 +1,5 @@
 {
-	"name": "df_silver_pizzas",
+	"name": "ds_silver_order_types",
 	"properties": {
 		"folder": {
 			"name": "Silver"
@@ -9,7 +9,7 @@
 			"sources": [
 				{
 					"dataset": {
-						"referenceName": "ds_sql_pizzas",
+						"referenceName": "ds_sql_order_details",
 						"type": "DatasetReference"
 					},
 					"name": "source1"
@@ -18,7 +18,7 @@
 			"sinks": [
 				{
 					"dataset": {
-						"referenceName": "ds_sql_silver_pizzas",
+						"referenceName": "ds_sql_silver_order_details",
 						"type": "DatasetReference"
 					},
 					"name": "sink1"
@@ -27,10 +27,10 @@
 			"transformations": [],
 			"scriptLines": [
 				"source(output(",
+				"          order_details_id as string,",
+				"          order_id as string,",
 				"          pizza_id as string,",
-				"          pizza_type_id as string,",
-				"          size as string,",
-				"          price as string",
+				"          quantity as string",
 				"     ),",
 				"     allowSchemaDrift: true,",
 				"     validateSchema: false,",
@@ -39,10 +39,10 @@
 				"source1 sink(allowSchemaDrift: true,",
 				"     validateSchema: false,",
 				"     input(",
+				"          order_details_id as integer,",
+				"          order_id as integer,",
 				"          pizza_id as string,",
-				"          pizza_type_id as integer,",
-				"          size as string,",
-				"          price as decimal(10,2)",
+				"          quantity as integer",
 				"     ),",
 				"     deletable:false,",
 				"     insertable:true,",

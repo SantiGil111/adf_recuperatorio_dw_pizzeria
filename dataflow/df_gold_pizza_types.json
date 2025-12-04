@@ -27,7 +27,7 @@
 			"transformations": [],
 			"scriptLines": [
 				"source(output(",
-				"          pizza_type_id as integer,",
+				"          pizza_type_id as string,",
 				"          name as string,",
 				"          category as string",
 				"     ),",

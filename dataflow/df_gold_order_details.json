@@ -29,7 +29,7 @@
 				"source(output(",
 				"          order_details_id as integer,",
 				"          order_id as integer,",
-				"          pizza_id as integer,",
+				"          pizza_id as string,",
 				"          quantity as integer",
 				"     ),",
 				"     allowSchemaDrift: true,",
