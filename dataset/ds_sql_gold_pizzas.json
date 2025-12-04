@@ -13,11 +13,14 @@
 		"schema": [
 			{
 				"name": "pizza_id",
-				"type": "int",
-				"precision": 10
+				"type": "varchar"
 			},
 			{
 				"name": "size",
+				"type": "varchar"
+			},
+			{
+				"name": "pizza_tipe_id",
 				"type": "varchar"
 			}
 		],
