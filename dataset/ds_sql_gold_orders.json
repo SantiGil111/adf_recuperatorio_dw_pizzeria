@@ -1,0 +1,29 @@
+{
+	"name": "ds_sql_gold_orders",
+	"properties": {
+		"linkedServiceName": {
+			"referenceName": "ls_sql_dw_pizzeria",
+			"type": "LinkedServiceReference"
+		},
+		"folder": {
+			"name": "Gold"
+		},
+		"annotations": [],
+		"type": "AzureSqlTable",
+		"schema": [
+			{
+				"name": "order_id",
+				"type": "int",
+				"precision": 10
+			},
+			{
+				"name": "date",
+				"type": "date"
+			}
+		],
+		"typeProperties": {
+			"schema": "gold",
+			"table": "dim_orders"
+		}
+	}
+}

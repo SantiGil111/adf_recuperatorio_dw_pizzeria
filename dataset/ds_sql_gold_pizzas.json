@@ -1,0 +1,29 @@
+{
+	"name": "ds_sql_gold_pizzas",
+	"properties": {
+		"linkedServiceName": {
+			"referenceName": "ls_sql_dw_pizzeria",
+			"type": "LinkedServiceReference"
+		},
+		"folder": {
+			"name": "Gold"
+		},
+		"annotations": [],
+		"type": "AzureSqlTable",
+		"schema": [
+			{
+				"name": "pizza_id",
+				"type": "int",
+				"precision": 10
+			},
+			{
+				"name": "size",
+				"type": "varchar"
+			}
+		],
+		"typeProperties": {
+			"schema": "gold",
+			"table": "dim_pizzas"
+		}
+	}
+}
