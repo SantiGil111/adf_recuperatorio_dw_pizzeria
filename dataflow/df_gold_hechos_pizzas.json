@@ -19,7 +19,14 @@
 						"referenceName": "ds_sql_gold_orders",
 						"type": "DatasetReference"
 					},
-					"name": "source1"
+					"name": "Orders"
+				},
+				{
+					"dataset": {
+						"referenceName": "ds_sql_gold_pizza_types",
+						"type": "DatasetReference"
+					},
+					"name": "PizzaTypes"
 				}
 			],
 			"sinks": [],
@@ -29,6 +36,9 @@
 				},
 				{
 					"name": "lookup1"
+				},
+				{
+					"name": "lookup2"
 				}
 			],
 			"scriptLines": [
@@ -49,7 +59,15 @@
 				"     allowSchemaDrift: true,",
 				"     validateSchema: false,",
 				"     isolationLevel: 'READ_UNCOMMITTED',",
-				"     format: 'table') ~> source1",
+				"     format: 'table') ~> Orders",
+				"source(output(",
+				"          pizza_type_id as string,",
+				"          name as string",
+				"     ),",
+				"     allowSchemaDrift: true,",
+				"     validateSchema: false,",
+				"     isolationLevel: 'READ_UNCOMMITTED',",
+				"     format: 'table') ~> PizzaTypes",
 				"SilverOrderDetails select(mapColumn(",
 				"          order_details_id,",
 				"          order_id,",
@@ -58,10 +76,14 @@
 				"     ),",
 				"     skipDuplicateMapInputs: true,",
 				"     skipDuplicateMapOutputs: true) ~> select1",
-				"select1 lookup(ERROR_FUNCTION('') == ERROR_FUNCTION(''),",
+				"select1, Orders lookup(select1@order_id == Orders@order_id,",
 				"     multiple: false,",
 				"     pickup: 'any',",
-				"     broadcast: 'auto')~> lookup1"
+				"     broadcast: 'auto')~> lookup1",
+				"lookup1 lookup(ERROR_FUNCTION('') == ERROR_FUNCTION(''),",
+				"     multiple: false,",
+				"     pickup: 'any',",
+				"     broadcast: 'auto')~> lookup2"
 			]
 		}
 	}
