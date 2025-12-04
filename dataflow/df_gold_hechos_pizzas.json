@@ -6,11 +6,162 @@
 		},
 		"type": "MappingDataFlow",
 		"typeProperties": {
-			"sources": [],
-			"sinks": [],
+			"sources": [
+				{
+					"dataset": {
+						"referenceName": "ds_sql_silver_order_details",
+						"type": "DatasetReference"
+					},
+					"name": "SilverOrderDetails"
+				},
+				{
+					"dataset": {
+						"referenceName": "ds_sql_silver_orders",
+						"type": "DatasetReference"
+					},
+					"name": "SilverOrders"
+				},
+				{
+					"dataset": {
+						"referenceName": "ds_sql_silver_pizza_types",
+						"type": "DatasetReference"
+					},
+					"name": "SilverPizzaTypes"
+				},
+				{
+					"dataset": {
+						"referenceName": "ds_sql_silver_pizzas",
+						"type": "DatasetReference"
+					},
+					"name": "SilverPizzas"
+				}
+			],
+			"sinks": [
+				{
+					"dataset": {
+						"referenceName": "ds_sql_gold_order_details",
+						"type": "DatasetReference"
+					},
+					"name": "GoldOrderDetails"
+				},
+				{
+					"dataset": {
+						"referenceName": "ds_sql_gold_orders",
+						"type": "DatasetReference"
+					},
+					"name": "GoldOrders"
+				},
+				{
+					"dataset": {
+						"referenceName": "ds_sql_gold_pizza_types",
+						"type": "DatasetReference"
+					},
+					"name": "GoldPizzaTypes"
+				},
+				{
+					"dataset": {
+						"referenceName": "ds_sql_gold_pizzas",
+						"type": "DatasetReference"
+					},
+					"name": "GoldPizzas"
+				}
+			],
 			"transformations": [],
 			"scriptLines": [
-				""
+				"source(output(",
+				"          order_details_id as integer,",
+				"          order_id as integer,",
+				"          pizza_id as string,",
+				"          quantity as integer",
+				"     ),",
+				"     allowSchemaDrift: true,",
+				"     validateSchema: false,",
+				"     isolationLevel: 'READ_UNCOMMITTED',",
+				"     format: 'table') ~> SilverOrderDetails",
+				"source(output(",
+				"          order_id as integer,",
+				"          date as date,",
+				"          time as timestamp",
+				"     ),",
+				"     allowSchemaDrift: true,",
+				"     validateSchema: false,",
+				"     isolationLevel: 'READ_UNCOMMITTED',",
+				"     format: 'table') ~> SilverOrders",
+				"source(output(",
+				"          pizza_type_id as string,",
+				"          name as string,",
+				"          category as string",
+				"     ),",
+				"     allowSchemaDrift: true,",
+				"     validateSchema: false,",
+				"     isolationLevel: 'READ_UNCOMMITTED',",
+				"     format: 'table') ~> SilverPizzaTypes",
+				"source(output(",
+				"          pizza_id as string,",
+				"          pizza_type_id as integer,",
+				"          size as string,",
+				"          price as decimal(10,2)",
+				"     ),",
+				"     allowSchemaDrift: true,",
+				"     validateSchema: false,",
+				"     isolationLevel: 'READ_UNCOMMITTED',",
+				"     format: 'table') ~> SilverPizzas",
+				"SilverOrderDetails sink(allowSchemaDrift: true,",
+				"     validateSchema: false,",
+				"     input(",
+				"          order_details_id as integer,",
+				"          quantity as integer",
+				"     ),",
+				"     deletable:false,",
+				"     insertable:true,",
+				"     updateable:false,",
+				"     upsertable:false,",
+				"     format: 'table',",
+				"     skipDuplicateMapInputs: true,",
+				"     skipDuplicateMapOutputs: true,",
+				"     errorHandlingOption: 'stopOnFirstError') ~> GoldOrderDetails",
+				"SilverOrders sink(allowSchemaDrift: true,",
+				"     validateSchema: false,",
+				"     input(",
+				"          order_id as integer,",
+				"          date as date",
+				"     ),",
+				"     deletable:false,",
+				"     insertable:true,",
+				"     updateable:false,",
+				"     upsertable:false,",
+				"     format: 'table',",
+				"     skipDuplicateMapInputs: true,",
+				"     skipDuplicateMapOutputs: true,",
+				"     errorHandlingOption: 'stopOnFirstError') ~> GoldOrders",
+				"SilverPizzaTypes sink(allowSchemaDrift: true,",
+				"     validateSchema: false,",
+				"     input(",
+				"          pizza_type_id as integer,",
+				"          name as string",
+				"     ),",
+				"     deletable:false,",
+				"     insertable:true,",
+				"     updateable:false,",
+				"     upsertable:false,",
+				"     format: 'table',",
+				"     skipDuplicateMapInputs: true,",
+				"     skipDuplicateMapOutputs: true,",
+				"     errorHandlingOption: 'stopOnFirstError') ~> GoldPizzaTypes",
+				"SilverPizzas sink(allowSchemaDrift: true,",
+				"     validateSchema: false,",
+				"     input(",
+				"          pizza_id as integer,",
+				"          size as string",
+				"     ),",
+				"     deletable:false,",
+				"     insertable:true,",
+				"     updateable:false,",
+				"     upsertable:false,",
+				"     format: 'table',",
+				"     skipDuplicateMapInputs: true,",
+				"     skipDuplicateMapOutputs: true,",
+				"     errorHandlingOption: 'stopOnFirstError') ~> GoldPizzas"
 			]
 		}
 	}
