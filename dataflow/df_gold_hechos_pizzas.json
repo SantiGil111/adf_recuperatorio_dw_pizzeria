@@ -26,7 +26,14 @@
 						"referenceName": "ds_sql_gold_pizzas",
 						"type": "DatasetReference"
 					},
-					"name": "source1"
+					"name": "Pizzas"
+				},
+				{
+					"dataset": {
+						"referenceName": "ds_sql_gold_pizza_types",
+						"type": "DatasetReference"
+					},
+					"name": "PizzaType"
 				}
 			],
 			"sinks": [],
@@ -66,12 +73,20 @@
 				"source(output(",
 				"          pizza_id as string,",
 				"          size as string,",
-				"          pizza_tipe_id as string",
+				"          pizza_type_id as string",
 				"     ),",
 				"     allowSchemaDrift: true,",
 				"     validateSchema: false,",
 				"     isolationLevel: 'READ_UNCOMMITTED',",
-				"     format: 'table') ~> source1",
+				"     format: 'table') ~> Pizzas",
+				"source(output(",
+				"          pizza_type_id as string,",
+				"          name as string",
+				"     ),",
+				"     allowSchemaDrift: true,",
+				"     validateSchema: false,",
+				"     isolationLevel: 'READ_UNCOMMITTED',",
+				"     format: 'table') ~> PizzaType",
 				"SilverOrderDetails select(mapColumn(",
 				"          order_details_id,",
 				"          order_id,",
@@ -84,15 +99,15 @@
 				"     multiple: false,",
 				"     pickup: 'any',",
 				"     broadcast: 'auto')~> lookup1",
-				"lookup1, source1 lookup(select1@pizza_id == source1@pizza_id,",
+				"lookup1, Pizzas lookup(select1@pizza_id == Pizzas@pizza_id,",
 				"     multiple: false,",
 				"     pickup: 'any',",
 				"     broadcast: 'auto')~> lookup2",
 				"lookup2 select(mapColumn(",
 				"          order_details_id,",
+				"          order_id = select1@order_id,",
 				"          pizza_id = select1@pizza_id,",
-				"          order_id = Orders@order_id,",
-				"          pizza_tipe_id",
+				"          pizza_type_id",
 				"     ),",
 				"     skipDuplicateMapInputs: true,",
 				"     skipDuplicateMapOutputs: true) ~> select2"

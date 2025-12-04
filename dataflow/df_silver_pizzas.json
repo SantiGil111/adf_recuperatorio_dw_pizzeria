@@ -40,7 +40,7 @@
 				"     validateSchema: false,",
 				"     input(",
 				"          pizza_id as string,",
-				"          pizza_type_id as integer,",
+				"          pizza_type_id as string,",
 				"          size as string,",
 				"          price as decimal(10,2)",
 				"     ),",

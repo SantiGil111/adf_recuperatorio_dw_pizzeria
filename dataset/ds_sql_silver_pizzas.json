@@ -17,8 +17,7 @@
 			},
 			{
 				"name": "pizza_type_id",
-				"type": "int",
-				"precision": 10
+				"type": "varchar"
 			},
 			{
 				"name": "size",

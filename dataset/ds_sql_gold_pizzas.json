@@ -20,7 +20,7 @@
 				"type": "varchar"
 			},
 			{
-				"name": "pizza_tipe_id",
+				"name": "pizza_type_id",
 				"type": "varchar"
 			}
 		],
