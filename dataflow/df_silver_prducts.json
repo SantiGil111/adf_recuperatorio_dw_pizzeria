@@ -1,0 +1,46 @@
+{
+	"name": "df_silver_prducts",
+	"properties": {
+		"folder": {
+			"name": "Silver"
+		},
+		"type": "MappingDataFlow",
+		"typeProperties": {
+			"sources": [
+				{
+					"dataset": {
+						"referenceName": "ds_sql_products",
+						"type": "DatasetReference"
+					},
+					"name": "source1"
+				}
+			],
+			"sinks": [],
+			"transformations": [
+				{
+					"name": "cast1"
+				}
+			],
+			"scriptLines": [
+				"source(output(",
+				"          Product_ID as string,",
+				"          Product_Name as string,",
+				"          Category_ID as string,",
+				"          Launch_Date as string,",
+				"          Price as string,",
+				"          notes as string",
+				"     ),",
+				"     allowSchemaDrift: true,",
+				"     validateSchema: false,",
+				"     isolationLevel: 'READ_UNCOMMITTED',",
+				"     query: 'SELECT\\r\\n    Product_ID,\\r\\n    Product_Name,\\r\\n    Category_ID,\\r\\n    Launch_Date,\\r\\n    Price,\\r\\n    notes\\r\\nFROM [bronze].[products]\\r\\nWHERE Product_ID IS NOT NULL\\r\\n  AND Product_Name IS NOT NULL\\r\\n  AND Category_ID IS NOT NULL\\r\\n  AND Launch_Date IS NOT NULL\\r\\n  AND notes IS NOT NULL\\r\\n  AND TRY_CAST(Price AS INT) IS NOT NULL   \\r\\n  AND Price <> \\'1\\'                         \\r\\n  AND Price NOT LIKE \\'%$%\\' ',",
+				"     format: 'query') ~> source1",
+				"source1 cast(output(",
+				"          Launch_Date as date,",
+				"          Price as integer",
+				"     ),",
+				"     errors: true) ~> cast1"
+			]
+		}
+	}
+}
