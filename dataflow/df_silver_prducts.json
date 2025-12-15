@@ -15,7 +15,15 @@
 					"name": "source1"
 				}
 			],
-			"sinks": [],
+			"sinks": [
+				{
+					"dataset": {
+						"referenceName": "ds_sql_silver_products",
+						"type": "DatasetReference"
+					},
+					"name": "sink1"
+				}
+			],
 			"transformations": [
 				{
 					"name": "cast1"
@@ -33,13 +41,31 @@
 				"     allowSchemaDrift: true,",
 				"     validateSchema: false,",
 				"     isolationLevel: 'READ_UNCOMMITTED',",
-				"     query: 'SELECT\\r\\n    Product_ID,\\r\\n    Product_Name,\\r\\n    Category_ID,\\r\\n    Launch_Date,\\r\\n    Price,\\r\\n    notes\\r\\nFROM [bronze].[products]\\r\\nWHERE Product_ID IS NOT NULL\\r\\n  AND Product_Name IS NOT NULL\\r\\n  AND Category_ID IS NOT NULL\\r\\n  AND Launch_Date IS NOT NULL\\r\\n  AND notes IS NOT NULL\\r\\n  AND TRY_CAST(Price AS INT) IS NOT NULL   \\r\\n  AND Price <> \\'1\\'                         \\r\\n  AND Price NOT LIKE \\'%$%\\' ',",
+				"     query: 'SELECT\\r\\n    Product_ID,\\r\\n    Product_Name,\\r\\n    Category_ID,\\r\\n    \\r\\n    CASE\\r\\n        WHEN TRY_CONVERT(date, Launch_Date, 103) IS NOT NULL THEN TRY_CONVERT(date, Launch_Date, 103)  -- DD/MM/YYYY\\r\\n        WHEN TRY_CONVERT(date, Launch_Date, 101) IS NOT NULL THEN TRY_CONVERT(date, Launch_Date, 101)  -- MM/DD/YYYY\\r\\n        WHEN TRY_CONVERT(date, Launch_Date, 120) IS NOT NULL THEN TRY_CONVERT(date, Launch_Date, 120)  -- YYYY-MM-DD\\r\\n        ELSE NULL\\r\\n    END AS Launch_Date,\\r\\n    TRY_CAST(Price AS INT) AS Price,\\r\\n    notes\\r\\nFROM [bronze].[products]\\r\\nWHERE Product_ID IS NOT NULL\\r\\n  AND Product_Name IS NOT NULL\\r\\n  AND Category_ID IS NOT NULL\\r\\n  AND notes IS NOT NULL\\r\\n  AND TRY_CAST(Price AS INT) IS NOT NULL\\r\\n  AND Price <> \\'1\\'\\r\\n  AND Price NOT LIKE \\'%$%\\'\\r\\n  AND (\\r\\n       TRY_CONVERT(date, Launch_Date, 103) IS NOT NULL\\r\\n    OR TRY_CONVERT(date, Launch_Date, 101) IS NOT NULL\\r\\n    OR TRY_CONVERT(date, Launch_Date, 120) IS NOT NULL\\r\\n  )',",
 				"     format: 'query') ~> source1",
 				"source1 cast(output(",
 				"          Launch_Date as date,",
 				"          Price as integer",
 				"     ),",
-				"     errors: true) ~> cast1"
+				"     errors: true) ~> cast1",
+				"cast1 sink(allowSchemaDrift: true,",
+				"     validateSchema: false,",
+				"     input(",
+				"          Product_ID as string,",
+				"          Product_Name as string,",
+				"          Category_ID as string,",
+				"          Launch_Date as date,",
+				"          Price as double,",
+				"          notes as string",
+				"     ),",
+				"     deletable:false,",
+				"     insertable:true,",
+				"     updateable:false,",
+				"     upsertable:false,",
+				"     format: 'table',",
+				"     skipDuplicateMapInputs: true,",
+				"     skipDuplicateMapOutputs: true,",
+				"     errorHandlingOption: 'stopOnFirstError') ~> sink1"
 			]
 		}
 	}

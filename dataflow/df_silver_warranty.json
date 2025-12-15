@@ -1,0 +1,67 @@
+{
+	"name": "df_silver_warranty",
+	"properties": {
+		"folder": {
+			"name": "Silver"
+		},
+		"type": "MappingDataFlow",
+		"typeProperties": {
+			"sources": [
+				{
+					"dataset": {
+						"referenceName": "ds_sql_warranty",
+						"type": "DatasetReference"
+					},
+					"name": "source1"
+				}
+			],
+			"sinks": [
+				{
+					"dataset": {
+						"referenceName": "ds_sql_silver_warranty",
+						"type": "DatasetReference"
+					},
+					"name": "sink1"
+				}
+			],
+			"transformations": [
+				{
+					"name": "cast1"
+				}
+			],
+			"scriptLines": [
+				"source(output(",
+				"          claim_id as string,",
+				"          claim_date as string,",
+				"          sale_id as string,",
+				"          repair_status as string",
+				"     ),",
+				"     allowSchemaDrift: true,",
+				"     validateSchema: false,",
+				"     isolationLevel: 'READ_UNCOMMITTED',",
+				"     query: 'SELECT\\n    claim_id,\\n    -- solo la fecha normalizada\\n    CASE\\n        WHEN TRY_CONVERT(date, claim_date, 103) IS NOT NULL THEN TRY_CONVERT(date, claim_date, 103)  -- DD/MM/YYYY\\n        WHEN TRY_CONVERT(date, claim_date, 101) IS NOT NULL THEN TRY_CONVERT(date, claim_date, 101)  -- MM/DD/YYYY\\n        WHEN TRY_CONVERT(date, claim_date, 120) IS NOT NULL THEN TRY_CONVERT(date, claim_date, 120)  -- YYYY-MM-DD\\n        ELSE NULL\\n    END AS claim_date,\\n    sale_id,\\n    repair_status\\nFROM [bronze].[warranty]\\nWHERE sale_id IS NOT NULL\\n  AND (\\n       TRY_CONVERT(date, claim_date, 103) IS NOT NULL\\n    OR TRY_CONVERT(date, claim_date, 101) IS NOT NULL\\n    OR TRY_CONVERT(date, claim_date, 120) IS NOT NULL\\n  )',",
+				"     format: 'query') ~> source1",
+				"source1 cast(output(",
+				"          claim_date as date 'yyyy-MM-dd'",
+				"     ),",
+				"     errors: true) ~> cast1",
+				"cast1 sink(allowSchemaDrift: true,",
+				"     validateSchema: false,",
+				"     input(",
+				"          claim_id as string,",
+				"          claim_date as date,",
+				"          sale_id as string,",
+				"          repair_status as string",
+				"     ),",
+				"     deletable:false,",
+				"     insertable:true,",
+				"     updateable:false,",
+				"     upsertable:false,",
+				"     format: 'table',",
+				"     skipDuplicateMapInputs: true,",
+				"     skipDuplicateMapOutputs: true,",
+				"     errorHandlingOption: 'stopOnFirstError') ~> sink1"
+			]
+		}
+	}
+}
