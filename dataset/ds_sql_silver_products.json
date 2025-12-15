@@ -1,0 +1,45 @@
+{
+	"name": "ds_sql_silver_products",
+	"properties": {
+		"linkedServiceName": {
+			"referenceName": "ls_sql_db_examen_final",
+			"type": "LinkedServiceReference"
+		},
+		"folder": {
+			"name": "Silver"
+		},
+		"annotations": [],
+		"type": "AzureSqlTable",
+		"schema": [
+			{
+				"name": "Product_ID",
+				"type": "nvarchar"
+			},
+			{
+				"name": "Product_Name",
+				"type": "nvarchar"
+			},
+			{
+				"name": "Category_ID",
+				"type": "nvarchar"
+			},
+			{
+				"name": "Launch_Date",
+				"type": "date"
+			},
+			{
+				"name": "Price",
+				"type": "float",
+				"precision": 15
+			},
+			{
+				"name": "notes",
+				"type": "nvarchar"
+			}
+		],
+		"typeProperties": {
+			"schema": "silver",
+			"table": "products"
+		}
+	}
+}
