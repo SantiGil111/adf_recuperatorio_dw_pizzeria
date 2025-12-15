@@ -52,7 +52,14 @@
 				"     format: 'table',",
 				"     skipDuplicateMapInputs: true,",
 				"     skipDuplicateMapOutputs: true,",
-				"     errorHandlingOption: 'stopOnFirstError') ~> sink1"
+				"     errorHandlingOption: 'stopOnFirstError',",
+				"     mapColumn(",
+				"          Store_ID,",
+				"          Store_Name,",
+				"          City,",
+				"          Country,",
+				"          opened",
+				"     )) ~> sink1"
 			]
 		}
 	}
