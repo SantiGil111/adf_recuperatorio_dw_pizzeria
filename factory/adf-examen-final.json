@@ -1,0 +1,9 @@
+{
+	"name": "adf-examen-final",
+	"location": "brazilsouth",
+	"identity": {
+		"type": "SystemAssigned",
+		"principalId": "22be2eca-8a12-4523-8b0a-9a9bf4dd87cc",
+		"tenantId": "cc28633f-12b8-46cb-bc15-951dae239b4d"
+	}
+}
