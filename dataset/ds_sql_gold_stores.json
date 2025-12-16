@@ -1,0 +1,33 @@
+{
+	"name": "ds_sql_gold_stores",
+	"properties": {
+		"linkedServiceName": {
+			"referenceName": "ls_sql_db_examen_final",
+			"type": "LinkedServiceReference"
+		},
+		"annotations": [],
+		"type": "AzureSqlTable",
+		"schema": [
+			{
+				"name": "Store_ID",
+				"type": "nvarchar"
+			},
+			{
+				"name": "Store_Name",
+				"type": "nvarchar"
+			},
+			{
+				"name": "City",
+				"type": "nvarchar"
+			},
+			{
+				"name": "Country",
+				"type": "nvarchar"
+			}
+		],
+		"typeProperties": {
+			"schema": "gold",
+			"table": "stores"
+		}
+	}
+}

@@ -1,0 +1,29 @@
+{
+	"name": "ds_sql_gold_warranty",
+	"properties": {
+		"linkedServiceName": {
+			"referenceName": "ls_sql_db_examen_final",
+			"type": "LinkedServiceReference"
+		},
+		"annotations": [],
+		"type": "AzureSqlTable",
+		"schema": [
+			{
+				"name": "claim_id",
+				"type": "nvarchar"
+			},
+			{
+				"name": "claim_date",
+				"type": "date"
+			},
+			{
+				"name": "sale_id",
+				"type": "nvarchar"
+			}
+		],
+		"typeProperties": {
+			"schema": "gold",
+			"table": "warranty"
+		}
+	}
+}
