@@ -23,6 +23,11 @@
 			{
 				"name": "product_id",
 				"type": "nvarchar"
+			},
+			{
+				"name": "quantity",
+				"type": "int",
+				"precision": 10
 			}
 		],
 		"typeProperties": {
