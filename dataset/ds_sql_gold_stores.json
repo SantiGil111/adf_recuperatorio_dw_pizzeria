@@ -5,6 +5,9 @@
 			"referenceName": "ls_sql_db_examen_final",
 			"type": "LinkedServiceReference"
 		},
+		"folder": {
+			"name": "Gold"
+		},
 		"annotations": [],
 		"type": "AzureSqlTable",
 		"schema": [
